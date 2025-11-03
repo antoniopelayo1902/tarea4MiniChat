@@ -1,0 +1,46 @@
+<div class="chat-app">
+  <h1>Chat Socket.IO - Tarea 4</h1>
+
+  <!-- Sección de conexión -->
+  <section class="connect-section">
+    <label for="username">Nombre de usuario</label>
+    <input
+      id="username"
+      type="text"
+      [(ngModel)]="username"
+      [disabled]="connected"
+      placeholder="Ingresa tu nombre"
+      (keyup.enter)="!connected && connect()"
+    />
+    <button (click)="connect()" [disabled]="connected || !username.trim()">Conectar</button>
+
+    <div class="status" [class.ok]="connected" [class.err]="!connected">
+      {{ connected ? ('Conectado como ' + username) : 'No conectado' }}
+    </div>
+  </section>
+
+  <!-- Ventana de mensajes -->
+  <section class="chat-window">
+    <div class="messages" id="messages">
+      <div *ngFor="let m of messages" class="msg" [class.mine]="m.from === username" [class.system]="m.from === 'SYSTEM'">
+        <div class="meta">
+          <span class="author">{{ m.from }}</span>
+          <span class="time">{{ m.timestamp | date:'shortTime' }}</span>
+        </div>
+        <div class="text">{{ m.text }}</div>
+      </div>
+    </div>
+
+    <!-- Envío de mensajes -->
+    <div class="composer">
+      <input
+        type="text"
+        [(ngModel)]="messageText"
+        [disabled]="!connected"
+        placeholder="Escribe un mensaje..."
+        (keyup.enter)="send()"
+      />
+      <button (click)="send()" [disabled]="!connected || !messageText.trim()">Enviar</button>
+    </div>
+  </section>
+</div>
